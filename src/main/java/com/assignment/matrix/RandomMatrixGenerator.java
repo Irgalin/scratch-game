@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class RandomMatrixGenerator {
 
-    public static String[][] generateMatrix(Config config) {
+    public static RandomMatrixResult generateMatrix(Config config) {
         int rows = config.getRows();
         int columns = config.getColumns();
         String[][] resultMatrix = new String[rows][columns];
@@ -21,7 +21,7 @@ public class RandomMatrixGenerator {
         BonusSymbolCell bonusSymbolCell = calculateBonusSymbolCell(rows, columns, random, standardSymbolsMap);
         populateMatrix(resultMatrix, rows, columns, standardSymbolsMap, bonusSymbolsMap, bonusSymbolCell, random);
 
-        return resultMatrix;
+        return new RandomMatrixResult(resultMatrix, bonusSymbolCell);
     }
 
     private static Map<String, Map<String, Integer>> createSymbolMap(Config config) {

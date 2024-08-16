@@ -1,8 +1,10 @@
 package com.assignment.config;
 
+import com.assignment.config.deserializer.ImpactTypeDeserializer;
 import com.assignment.config.deserializer.SymbolTypeDeserializer;
 import com.assignment.config.deserializer.WinCombinationGroupTypeDeserializer;
 import com.assignment.config.deserializer.WinCombinationWhenTypeDeserializer;
+import com.assignment.config.enums.ImpactType;
 import com.assignment.config.enums.SymbolType;
 import com.assignment.config.enums.WinCombinationGroupType;
 import com.assignment.config.enums.WinCombinationWhenType;
@@ -31,7 +33,8 @@ public class Config {
         @JsonDeserialize(using = SymbolTypeDeserializer.class)
         private SymbolType type;
         private Double extra;
-        private String impact;
+        @JsonDeserialize(using = ImpactTypeDeserializer.class)
+        private ImpactType impact;
     }
 
     @Data

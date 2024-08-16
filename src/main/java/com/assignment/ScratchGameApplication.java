@@ -6,6 +6,8 @@ import com.assignment.config.Config;
 import com.assignment.config.ConfigParser;
 import com.assignment.config.ConfigValidator;
 import com.assignment.matrix.RandomMatrixGenerator;
+import com.assignment.matrix.RandomMatrixResult;
+import com.assignment.reward.RewardCalculator;
 import com.assignment.winlogic.WinCombinationEvaluator;
 import org.apache.commons.cli.ParseException;
 
@@ -26,15 +28,24 @@ public class ScratchGameApplication {
             ConfigValidator.validate(config);
             System.out.println("Config file parsed successfully.");
 
-            String[][] matrix = RandomMatrixGenerator.generateMatrix(config);
+            RandomMatrixResult matrixResult = RandomMatrixGenerator.generateMatrix(config);
             System.out.println("Generated matrix:");
-            for (String[] row : matrix) {
+            for (String[] row : matrixResult.getMatrix()) {
                 System.out.println(Arrays.toString(row));
             }
             Map<String, List<Config.WinCombination>> winCombBySymbolMap =
-                    WinCombinationEvaluator.evaluate(matrix, config.getWinCombinations());
+                    WinCombinationEvaluator.evaluate(matrixResult.getMatrix(), config.getWinCombinations());
 
             printWinCombosMap(winCombBySymbolMap);
+
+            double reward = RewardCalculator.calculateReward(
+                    winCombBySymbolMap,
+                    matrixResult.getBonusSymbolValue(),
+                    config.getSymbols(),
+                    parsedArgs.bettingAmount());
+
+            System.out.println("Reward: " + reward);
+
 
         } catch (ParseException | IOException e) {
             System.out.println("ERROR: " + e.getMessage());

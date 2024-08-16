@@ -64,7 +64,7 @@ public class ConfigValidator {
                     errorMessages.add("symbols[" + index + "].reward_multiplier must be greater than 0.");
                 }
             } else if (SymbolType.BONUS.equals(symbol.getType())) {
-                if (symbol.getImpact() == null || symbol.getImpact().isEmpty()) {
+                if (symbol.getImpact() == null) {
                     errorMessages.add("symbols[" + index + "].impact is missing or empty.");
                 }
             }

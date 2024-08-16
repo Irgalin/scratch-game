@@ -1,7 +1,9 @@
 import com.assignment.config.Config;
 import com.assignment.config.Config.Probabilities;
 import com.assignment.config.Config.Probabilities.StandardSymbol;
+import com.assignment.matrix.BonusSymbolCell;
 import com.assignment.matrix.RandomMatrixGenerator;
+import com.assignment.matrix.RandomMatrixResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,23 +11,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RandomMatrixGeneratorTest {
 
     @Test
     void testValidMatrixGeneration() {
         Config config = createValidConfig();
-        String[][] matrix = RandomMatrixGenerator.generateMatrix(config);
+        RandomMatrixResult result = RandomMatrixGenerator.generateMatrix(config);
+        String[][] matrix = result.getMatrix();
+        BonusSymbolCell bonusSymbolCell = result.getBonusSymbolCell();
+
         assertNotNull(matrix);
         assertEquals(config.getRows(), matrix.length);
         assertEquals(config.getColumns(), matrix[0].length);
+        assertNotNull(bonusSymbolCell);
     }
 
     @Test
     void testRandomSymbolSelection() {
         Config config = createValidConfig();
-        String[][] matrix = RandomMatrixGenerator.generateMatrix(config);
+        RandomMatrixResult result = RandomMatrixGenerator.generateMatrix(config);
+        String[][] matrix = result.getMatrix();
+        BonusSymbolCell bonusSymbolCell = result.getBonusSymbolCell();
+
         assertNotNull(matrix);
         assertTrue(matrix.length > 0 && matrix[0].length > 0);
         for (String[] row : matrix) {
@@ -33,6 +44,20 @@ public class RandomMatrixGeneratorTest {
                 assertNotNull(cell);
             }
         }
+        assertNotNull(bonusSymbolCell);
+    }
+
+    @Test
+    void testBonusSymbolCellPlacement() {
+        Config config = createValidConfig();
+        RandomMatrixResult result = RandomMatrixGenerator.generateMatrix(config);
+        String[][] matrix = result.getMatrix();
+        BonusSymbolCell bonusSymbolCell = result.getBonusSymbolCell();
+
+        assertNotNull(matrix);
+        assertNotNull(bonusSymbolCell);
+        String bonusSymbol = result.getBonusSymbolValue();
+        assertTrue(bonusSymbol.equals("X") || bonusSymbol.equals("Y"));
     }
 
     private Config createValidConfig() {
@@ -70,5 +95,4 @@ public class RandomMatrixGeneratorTest {
 
         return config;
     }
-
 }
