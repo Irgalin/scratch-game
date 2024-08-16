@@ -1,5 +1,8 @@
 package com.assignment.config;
 
+import com.assignment.config.enums.SymbolType;
+import com.assignment.config.enums.WinCombinationGroupType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,17 +53,17 @@ public class ConfigValidator {
         for (Map.Entry<String, Config.Symbol> entry : symbols.entrySet()) {
             Config.Symbol symbol = entry.getValue();
 
-            if (symbol.getType() == null || symbol.getType().isEmpty()) {
+            if (symbol.getType() == null) {
                 errorMessages.add("symbols[" + index + "].type is missing or empty.");
             }
 
-            if ("standard".equals(symbol.getType())) {
+            if (SymbolType.STANDARD.equals(symbol.getType())) {
                 if (symbol.getRewardMultiplier() == null) {
                     errorMessages.add("symbols[" + index + "].reward_multiplier is missing.");
                 } else if (symbol.getRewardMultiplier() <= 0) {
                     errorMessages.add("symbols[" + index + "].reward_multiplier must be greater than 0.");
                 }
-            } else if ("bonus".equals(symbol.getType())) {
+            } else if (SymbolType.BONUS.equals(symbol.getType())) {
                 if (symbol.getImpact() == null || symbol.getImpact().isEmpty()) {
                     errorMessages.add("symbols[" + index + "].impact is missing or empty.");
                 }
@@ -98,15 +101,15 @@ public class ConfigValidator {
         for (Map.Entry<String, Config.WinCombination> entry : winCombinations.entrySet()) {
             Config.WinCombination winCombination = entry.getValue();
 
-            if (winCombination.getGroup() == null || winCombination.getGroup().isEmpty()) {
+            if (winCombination.getGroup() == null) {
                 errorMessages.add("win_combinations[" + index + "].group is missing or empty.");
             }
 
-            if (winCombination.getWhen() == null || winCombination.getWhen().isEmpty()) {
+            if (winCombination.getWhen() == null) {
                 errorMessages.add("win_combinations[" + index + "].when is missing or empty.");
             }
 
-            if ("same_symbols".equals(winCombination.getGroup())) {
+            if (WinCombinationGroupType.SAME_SYMBOLS.equals(winCombination.getGroup())) {
                 if (winCombination.getRewardMultiplier() == null) {
                     errorMessages.add("win_combinations[" + index + "].reward_multiplier is missing.");
                 }

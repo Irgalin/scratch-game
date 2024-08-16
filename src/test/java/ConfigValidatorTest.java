@@ -1,14 +1,19 @@
-
 import com.assignment.config.Config;
 import com.assignment.config.ConfigValidator;
 import com.assignment.config.InvalidConfigException;
+import com.assignment.config.enums.SymbolType;
+import com.assignment.config.enums.WinCombinationGroupType;
+import com.assignment.config.enums.WinCombinationWhenType;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConfigValidatorTest {
 
@@ -110,7 +115,7 @@ public class ConfigValidatorTest {
     void testInvalidBonusSymbolImpact() {
         Config config = createValidConfig();
         Config.Symbol bonusSymbol = new Config.Symbol();
-        bonusSymbol.setType("bonus");
+        bonusSymbol.setType(SymbolType.BONUS);
         bonusSymbol.setImpact(null);
         config.getSymbols().put("symbol2", bonusSymbol);
         InvalidConfigException exception = assertThrows(InvalidConfigException.class, () -> ConfigValidator.validate(config));
@@ -171,7 +176,7 @@ public class ConfigValidatorTest {
 
         Map<String, Config.Symbol> symbols = new HashMap<>();
         Config.Symbol symbol = new Config.Symbol();
-        symbol.setType("standard");
+        symbol.setType(SymbolType.STANDARD);
         symbol.setRewardMultiplier(2.0);
         symbols.put("symbol1", symbol);
         config.setSymbols(symbols);
@@ -186,10 +191,10 @@ public class ConfigValidatorTest {
 
         Map<String, Config.WinCombination> winCombinations = new HashMap<>();
         Config.WinCombination winCombination = new Config.WinCombination();
-        winCombination.setGroup("same_symbols");
+        winCombination.setGroup(WinCombinationGroupType.SAME_SYMBOLS);
         winCombination.setRewardMultiplier(3.0);
         winCombination.setCount(3);
-        winCombination.setWhen("some_condition");
+        winCombination.setWhen(WinCombinationWhenType.SAME_SYMBOLS);
         winCombinations.put("win1", winCombination);
         config.setWinCombinations(winCombinations);
 

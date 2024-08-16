@@ -1,6 +1,13 @@
 package com.assignment.config;
 
+import com.assignment.config.deserializer.SymbolTypeDeserializer;
+import com.assignment.config.deserializer.WinCombinationGroupTypeDeserializer;
+import com.assignment.config.deserializer.WinCombinationWhenTypeDeserializer;
+import com.assignment.config.enums.SymbolType;
+import com.assignment.config.enums.WinCombinationGroupType;
+import com.assignment.config.enums.WinCombinationWhenType;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.util.List;
@@ -21,7 +28,8 @@ public class Config {
     public static class Symbol {
         @JsonProperty(value = "reward_multiplier")
         private Double rewardMultiplier;
-        private String type;
+        @JsonDeserialize(using = SymbolTypeDeserializer.class)
+        private SymbolType type;
         private Double extra;
         private String impact;
     }
@@ -50,9 +58,11 @@ public class Config {
     public static class WinCombination {
         @JsonProperty(value = "reward_multiplier")
         private Double rewardMultiplier;
-        private String when;
+        @JsonDeserialize(using = WinCombinationWhenTypeDeserializer.class)
+        private WinCombinationWhenType when;
         private Integer count;
-        private String group;
+        @JsonDeserialize(using = WinCombinationGroupTypeDeserializer.class)
+        private WinCombinationGroupType group;
         @JsonProperty("covered_areas")
         private List<List<String>> coveredAreas;
     }
