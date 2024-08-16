@@ -128,6 +128,44 @@ public class ConfigValidatorTest {
         assertTrue(exception.getMessage().contains("win_combinations[0].count must be greater than 0."));
     }
 
+
+    @Test
+    void testRowsConsistency() {
+        Config config = createValidConfig();
+        // Set rows to a value that does not match probabilities
+        config.setRows(2);
+        InvalidConfigException exception = assertThrows(InvalidConfigException.class, () -> ConfigValidator.validate(config));
+        assertTrue(exception.getMessage().contains("'rows' property value doesn't match to the max number of rows in 'probabilities'"));
+    }
+
+    @Test
+    void testColumnsConsistency() {
+        Config config = createValidConfig();
+        // Set columns to a value that does not match probabilities
+        config.setColumns(2);
+        InvalidConfigException exception = assertThrows(InvalidConfigException.class, () -> ConfigValidator.validate(config));
+        assertTrue(exception.getMessage().contains("'columns' property value doesn't match to the max number of columns in 'probabilities'"));
+    }
+
+    @Test
+    void testSettingRowsFromProbabilities() {
+        Config config = createValidConfig();
+        config.setRows(null);
+        assertDoesNotThrow(() -> ConfigValidator.validate(config));
+        // Check if rows is set from probabilities
+        assertEquals(1, config.getRows());
+    }
+
+    @Test
+    void testSettingColumnsFromProbabilities() {
+        Config config = createValidConfig();
+        config.setColumns(null);
+        assertDoesNotThrow(() -> ConfigValidator.validate(config));
+        // Check if columns is set from probabilities
+        assertEquals(1, config.getColumns());
+    }
+
+
     private Config createValidConfig() {
         Config config = new Config();
 

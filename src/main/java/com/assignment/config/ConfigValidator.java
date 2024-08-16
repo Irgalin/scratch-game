@@ -15,7 +15,14 @@ public class ConfigValidator {
             validateSymbols(config.getSymbols(), errorMessages);
         }
         if (config.getProbabilities() != null) {
-            validateProbabilities(config.getProbabilities(), errorMessages);
+            List<String> probabilitiesErrorMessages = new ArrayList<>();
+            validateProbabilities(config.getProbabilities(), probabilitiesErrorMessages);
+            if (probabilitiesErrorMessages.isEmpty()) {
+                validateRowsConsistency(config, errorMessages);
+                validateColumnsConsistency(config, errorMessages);
+            } else {
+                errorMessages.addAll(probabilitiesErrorMessages);
+            }
         }
         if (config.getWinCombinations() != null) {
             validateWinCombinations(config.getWinCombinations(), errorMessages);
@@ -67,10 +74,10 @@ public class ConfigValidator {
             for (int i = 0; i < probabilities.getStandardSymbols().size(); i++) {
                 Config.Probabilities.StandardSymbol standardSymbol = probabilities.getStandardSymbols().get(i);
 
-                if (standardSymbol.getColumn() < 0) {
+                if (standardSymbol.getColumn() == null || standardSymbol.getColumn() < 0) {
                     errorMessages.add("probabilities.standard_symbols[" + i + "].column is invalid.");
                 }
-                if (standardSymbol.getRow() < 0) {
+                if (standardSymbol.getRow() == null || standardSymbol.getRow() < 0) {
                     errorMessages.add("probabilities.standard_symbols[" + i + "].row is invalid.");
                 }
                 if (standardSymbol.getSymbols() == null || standardSymbol.getSymbols().isEmpty()) {
@@ -117,4 +124,37 @@ public class ConfigValidator {
             index++;
         }
     }
+
+    private static void validateRowsConsistency(Config config, List<String> errorMessages) {
+        int maxRowInProbabilities = config.getProbabilities().getStandardSymbols().stream()
+                .mapToInt(Config.Probabilities.StandardSymbol::getRow)
+                .max()
+                .orElse(-1) + 1;
+        Integer rowsInTopLevelProperty = config.getRows();
+        if (rowsInTopLevelProperty != null) {
+            if (!rowsInTopLevelProperty.equals(maxRowInProbabilities)) {
+                errorMessages.add("'rows' property value doesn't match to the max number of rows in 'probabilities'");
+            }
+        } else {
+            // 'rows' property is optional, so if it's not specified, take this value from 'probabilities'
+            config.setRows(maxRowInProbabilities);
+        }
+    }
+
+    private static void validateColumnsConsistency(Config config, List<String> errorMessages) {
+        int maxColumnInProbabilities = config.getProbabilities().getStandardSymbols().stream()
+                .mapToInt(Config.Probabilities.StandardSymbol::getColumn)
+                .max()
+                .orElse(-1) + 1;
+        Integer columnsInTopLevelProperty = config.getColumns();
+        if (columnsInTopLevelProperty != null) {
+            if (!columnsInTopLevelProperty.equals(maxColumnInProbabilities)) {
+                errorMessages.add("'columns' property value doesn't match to the max number of columns in 'probabilities'");
+            }
+        } else {
+            // 'column' property is optional, so if it's not specified, take this value from 'probabilities'
+            config.setColumns(maxColumnInProbabilities);
+        }
+    }
+
 }

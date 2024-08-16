@@ -5,9 +5,11 @@ import com.assignment.args.ParsedArguments;
 import com.assignment.config.Config;
 import com.assignment.config.ConfigParser;
 import com.assignment.config.ConfigValidator;
+import com.assignment.matrix.RandomMatrixGenerator;
 import org.apache.commons.cli.ParseException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ScratchGameApplication {
 
@@ -20,6 +22,9 @@ public class ScratchGameApplication {
             Config config = ConfigParser.parseConfig(parsedArgs.configFilePath());
             ConfigValidator.validate(config);
             System.out.println("Config file parsed successfully.");
+
+            String[][] matrix = RandomMatrixGenerator.generateMatrix(config);
+            System.out.println("Generated matrix: \n" + Arrays.deepToString(matrix));
 
         } catch (ParseException | IOException e) {
             System.out.println("ERROR: " + e.getMessage());
