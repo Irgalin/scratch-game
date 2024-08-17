@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.assignment'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
@@ -21,24 +21,26 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(18)
+    }
+}
+
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true
+    }
 }
 
 jar {
-    manifest {
-        attributes(
-                'Main-Class': 'com.assignment.ScratchGameApplication'
-        )
-    }
-}
-
-tasks.register('fatJar', Jar) {
-    archiveClassifier = 'all'
+    archiveFileName = "${project.name}-${project.version}.jar"
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    with jar
     manifest {
         attributes(
                 'Main-Class': 'com.assignment.ScratchGameApplication'
@@ -46,5 +48,3 @@ tasks.register('fatJar', Jar) {
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
-build.dependsOn fatJar
