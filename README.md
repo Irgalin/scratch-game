@@ -38,7 +38,12 @@ Example command:
 java -jar build/libs/scratch-game-1.0.0.jar --config path/to/config.json --betting-amount 100
 ```
 
-There is an example configuration file stored in the root project directory: `config.json`.
+There is an example configuration file stored in the root project directory: `config.json`. To use this configuration
+file, run the following command **from the project root directory**:
+
+```sh
+java -jar build/libs/scratch-game-1.0.0.jar --config config.json --betting-amount 100
+```
 
 Example output:
 
