@@ -2,6 +2,7 @@ package com.assignment.config;
 
 import com.assignment.config.deserializer.ImpactTypeDeserializer;
 import com.assignment.config.deserializer.SymbolTypeDeserializer;
+import com.assignment.config.deserializer.WinCombinationDeserializer;
 import com.assignment.config.deserializer.WinCombinationGroupTypeDeserializer;
 import com.assignment.config.deserializer.WinCombinationWhenTypeDeserializer;
 import com.assignment.config.enums.ImpactType;
@@ -24,6 +25,7 @@ public class Config {
     private Map<String, Symbol> symbols;
     private Probabilities probabilities;
     @JsonProperty("win_combinations")
+    @JsonDeserialize(using = WinCombinationDeserializer.class)
     private Map<String, WinCombination> winCombinations;
 
     @Data
@@ -59,6 +61,8 @@ public class Config {
 
     @Data
     public static class WinCombination {
+        // custom field to store the name of the win combination inside the entity
+        private String name;
         @JsonProperty(value = "reward_multiplier")
         private Double rewardMultiplier;
         @JsonDeserialize(using = WinCombinationWhenTypeDeserializer.class)

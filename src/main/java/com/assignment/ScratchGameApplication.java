@@ -7,11 +7,11 @@ import com.assignment.config.ConfigParser;
 import com.assignment.config.ConfigValidator;
 import com.assignment.matrix.RandomMatrixGenerator;
 import com.assignment.matrix.RandomMatrixResult;
+import com.assignment.result.GameResult;
+import com.assignment.result.ResultPrinter;
 import com.assignment.reward.RewardCalculator;
 import com.assignment.winlogic.WinCombinationEvaluator;
-import org.apache.commons.cli.ParseException;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +46,17 @@ public class ScratchGameApplication {
 
             System.out.println("Reward: " + reward);
 
+            GameResult gameResult = new GameResult(
+                    matrixResult.getMatrix(),
+                    reward,
+                    winCombBySymbolMap,
+                    matrixResult.getBonusSymbolValue()
+            );
+            System.out.println("Game result created successfully:");
 
-        } catch (ParseException | IOException e) {
+            ResultPrinter.printResult(gameResult);
+
+        } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
         }
 
