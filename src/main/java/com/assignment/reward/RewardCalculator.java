@@ -10,6 +10,9 @@ public class RewardCalculator {
     public static double calculateReward(Map<String, List<Config.WinCombination>> winCombBySymbolMap,
                                          String bonusSymbolValue, Map<String, Config.Symbol> allSymbols,
                                          double bettingAmount) {
+        if (winCombBySymbolMap == null || winCombBySymbolMap.isEmpty()) {
+            return 0.0;
+        }
         double totalReward = 0;
         double bonusMultiplier = 1;
         double extraBonus = 0;

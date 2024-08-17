@@ -175,4 +175,24 @@ public class RewardCalculatorTest {
         assertEquals(0, reward);
     }
 
+    @Test
+    public void testCalculateRewardNoWinCombinations() {
+        Map<String, List<Config.WinCombination>> winCombBySymbolMap = Collections.emptyMap();
+
+        Config.Symbol symbolConfigA = new Config.Symbol();
+        symbolConfigA.setRewardMultiplier(2.0);
+
+        String bonusSymbolValue = "+1000";
+        Config.Symbol bonusSymbol = new Config.Symbol();
+        bonusSymbol.setImpact(ImpactType.EXTRA_BONUS);
+
+        Map<String, Config.Symbol> symbols = Map.of(
+                "+1000", bonusSymbol,
+                "A", symbolConfigA);
+        double bettingAmount = 10.0;
+
+        double reward = RewardCalculator.calculateReward(winCombBySymbolMap, bonusSymbolValue, symbols, bettingAmount);
+        assertEquals(0.0, reward);
+    }
+
 }
