@@ -33,11 +33,12 @@ public class SameSymbolsCheckerTest {
     @Test
     public void testNoMatchingCounts() {
         String[][] matrix = {
-                {"A", "B"},
-                {"C", "D"}
+                {"A", "B", "C"},
+                {"D", "E", "F"},
+                {"G", "H", "I"}
         };
         Config.WinCombination combination = new Config.WinCombination();
-        combination.setCount(3);
+        combination.setCount(4);
         List<String> result = checker.check(matrix, combination);
         assertEquals(Collections.emptyList(), result);
     }
@@ -45,23 +46,25 @@ public class SameSymbolsCheckerTest {
     @Test
     public void testSomeMatchingCounts() {
         String[][] matrix = {
-                {"A", "A"},
-                {"B", "B"}
+                {"A", "A", "B"},
+                {"B", "B", "C"},
+                {"C", "C", "A"}
         };
         Config.WinCombination combination = new Config.WinCombination();
-        combination.setCount(2);
+        combination.setCount(3);
         List<String> result = checker.check(matrix, combination);
-        assertEquals(Arrays.asList("A", "B"), result);
+        assertEquals(Arrays.asList("A", "B", "C"), result);
     }
 
     @Test
     public void testAllSymbolsMatchCount() {
         String[][] matrix = {
-                {"A", "A"},
-                {"A", "A"}
+                {"A", "A", "A"},
+                {"A", "A", "A"},
+                {"A", "A", "A"}
         };
         Config.WinCombination combination = new Config.WinCombination();
-        combination.setCount(4);
+        combination.setCount(9);
         List<String> result = checker.check(matrix, combination);
         assertEquals(Collections.singletonList("A"), result);
     }
@@ -69,11 +72,12 @@ public class SameSymbolsCheckerTest {
     @Test
     public void testNoSymbolsMatchCount() {
         String[][] matrix = {
-                {"A", "B"},
-                {"C", "D"}
+                {"A", "B", "C"},
+                {"D", "E", "F"},
+                {"G", "H", "I"}
         };
         Config.WinCombination combination = new Config.WinCombination();
-        combination.setCount(4);
+        combination.setCount(9);
         List<String> result = checker.check(matrix, combination);
         assertEquals(Collections.emptyList(), result);
     }
